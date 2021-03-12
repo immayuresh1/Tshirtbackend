@@ -1,25 +1,36 @@
 const mongoose = require("mongoose");
 const express = require("express");
 const app = express();
-const env = require("dotenv");
-env.config()
+require("dotenv").config(); 
+const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
+const cors = require("cors");
+const authRoutes = require("./routes/auth");
+const uuid= require('uuid/v1');
 
+// Db connection
 mongoose
-  .connect( "mongodb://localhost:27017/tshirt", {
+  .connect(process.env.DATABASE, { 
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    useCreateIndex: true,
+    useCreateIndex: true, 
   })
-  .then(() => {  
-    console.log("DB CONNECTED");
+  .then(() => {
+    console.log("DB CONNECTED"); 
   });
 
+// middlewares
+app.use(bodyParser.json());
+app.use(cookieParser());
+app.use(cors());
+
+// My routes
+app.use("/api", authRoutes);
+
+// port
 const port = process.env.PORT || 8000;
 
-app.get("/", (req, res) => { 
-  res.send("Hello World!");
-});
-
+// starting server
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
 });
