@@ -28,4 +28,26 @@ if (!errors.isEmpty()){
 
 exports.signout = (req, res) => {
   res.json({ message: "user signout" });
+  if (!errors.isEmpty()){
+    return res.status(422).json({
+      error:errors.array()[0].msg
+    })
+  } 
+  
+User.findOne({email},(err,user)=>{
+  if(err){
+    res.status(400).json({
+      error:"USER email does not exit"
+    })
+  }
+  if (user.authenticate(password ))
+})
+
+
+
 };
+
+exports.signin = (req,res)=>{
+const {email,password} = req.body
+
+}
