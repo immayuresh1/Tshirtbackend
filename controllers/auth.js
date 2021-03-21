@@ -32,14 +32,15 @@ exports.signout = (req, res) => {
 };
 
 exports.signin = (req, res) => {
+  const errors = validationResult(req);
   const { email, password } = req.body;
   if (!errors.isEmpty()) {
-    return res.status(422).json({
+    return res.status(422).json({ 
       error: errors.array()[0].msg,
-    });
+    }); 
   }
   User.findOne({ email }, (err, user) => {
-    if (err) {
+    if (err || !user) {
       res.status(400).json({
         error: "user email does not exists",
       });
@@ -55,7 +56,7 @@ exports.signin = (req, res) => {
     res.cookie("token", token, { expire: new Date() + 9999 });
 
     // send res to frontend
-    const {id,name,email,role} =user
+    const {_id,name,email,role} =user
     return res.json({token,user:{_id,name,email,role}})
   });
 };
