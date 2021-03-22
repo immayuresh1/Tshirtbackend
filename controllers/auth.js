@@ -61,3 +61,13 @@ exports.signin = (req, res) => {
     return res.json({token,user:{_id,name,email,role}})
   });
 };
+
+// protected routes
+exports.isSignedIn = expressJwt({
+  secret:process.env.SECRET,
+  userProperty:"auth"
+})
+
+
+
+// custom  middleware
