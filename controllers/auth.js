@@ -28,7 +28,7 @@ exports.signup = (req, res) => {
 };
 
 exports.signout = (req, res) => {
-  res.clearCookie("token")
+  res.clearCookie("token");
   res.json({ message: "user signout successfully" });
 };
 
@@ -36,9 +36,9 @@ exports.signin = (req, res) => {
   const errors = validationResult(req);
   const { email, password } = req.body;
   if (!errors.isEmpty()) {
-    return res.status(422).json({ 
+    return res.status(422).json({
       error: errors.array()[0].msg,
-    }); 
+    });
   }
   User.findOne({ email }, (err, user) => {
     if (err || !user) {
@@ -53,21 +53,34 @@ exports.signin = (req, res) => {
     }
     // create token
     const token = jwt.sign({ _id: user._id }, process.env.SECRET);
-    // put token in cookie 
+    // put token in cookie
     res.cookie("token", token, { expire: new Date() + 9999 });
 
     // send res to frontend
-    const {_id,name,email,role} =user
-    return res.json({token,user:{_id,name,email,role}})
+    const { _id, name, email, role } = user;
+    return res.json({ token, user: { _id, name, email, role } });
   });
 };
 
 // protected routes
 exports.isSignedIn = expressJwt({
-  secret:process.env.SECRET,
-  userProperty:"auth"
-})
-
-
+  secret: process.env.SECRET,
+  userProperty: "auth",
+});
 
 // custom  middleware
+exports.isAuthenticated = (req,res,next)=>{
+
+  let checker = req.profile && req.auth && req.profile._id ===req.auth._id;
+  if(!checker){
+    return res.status(403).json({
+      error:"ACCESS DENIED"
+    })
+  }
+  next()
+}
+
+
+exports.isAdmin = (req,res,next)=>{
+  next()
+}
