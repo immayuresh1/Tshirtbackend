@@ -5,8 +5,10 @@ require("dotenv").config();
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
-const authRoutes = require("./routes/auth");
 const uuid= require('uuid/v1');
+
+const authRoutes = require("./routes/auth");
+const userRoutes = require("./routes/user");
 
 // Db connection
 mongoose
@@ -26,6 +28,7 @@ app.use(cors());
 
 // My routes
 app.use("/api", authRoutes);
+
 
 // port
 const port = process.env.PORT || 8000;
