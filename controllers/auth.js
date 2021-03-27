@@ -82,5 +82,10 @@ exports.isAuthenticated = (req,res,next)=>{
 
 
 exports.isAdmin = (req,res,next)=>{
+  if(req.profile.role=== 0 ){
+    res.status(403).json({
+      error:"you are not admin"
+    })
+  }
   next()
 }
