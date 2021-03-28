@@ -17,7 +17,7 @@ mongoose
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true, 
-  })
+  }) 
   .then(() => {
     console.log("DB CONNECTED"); 
   });
@@ -29,7 +29,7 @@ app.use(cors());
 
 // My routes
 app.use("/api", authRoutes);
-app.use("/api", userRoutes);
+app.use("/api", userRoutes); 
 
 
 // port
