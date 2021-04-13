@@ -1,4 +1,5 @@
 const User = require("../models/user");
+const Order = require("../models/Order")
 
 exports.getUserById = (req, res, next, id) => {
   User.findById(id).exec((err, user) => {
@@ -9,7 +10,7 @@ exports.getUserById = (req, res, next, id) => {
     }
     req.profile = user;
     next();
-  });
+  }); 
 };
 
 exports.getUser = (req, res) => {
@@ -21,20 +22,32 @@ exports.getUser = (req, res) => {
   return res.json(req.profile);
 };
 
-exports.updateUser = (req,res)=>{
+exports.updateUser = (req, res) => {
   User.findByIdAndUpdate(
-    {_id:req.profile._id},
-    {$set:req.body},
-    {new:true,useFindAndModify:false},
-    (err,user)=>{
+    { _id: req.profile._id },
+    { $set: req.body },
+    { new: true, useFindAndModify: false },
+    (err, user) => {
       return res.status(400).json({
-        error:"You are not autho to update!"
-      })
+        error: "You are not autho to update!",
+      });
 
-    
-    user.salt = undefined;
-  user.encry_password = undefined;
-  res.json(user)
+      user.salt = undefined;
+      user.encry_password = undefined;
+      res.json(user);
     }
-  )
-}
+  );
+};
+exports.userPurchaseList = (req, res) => {
+  Order.find({ user: req.profile._id })
+    .populate("user", "_id name")
+    .exec(
+      (err, order) => {
+        if(err){
+        res.status(400).json({
+          error: "NO order in the account",
+        });
+      }
+      return res.json(Order)
+      });
+};
