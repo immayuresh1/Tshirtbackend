@@ -4,14 +4,14 @@ const app = express();
 require("dotenv").config(); 
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
-const cors = require("cors");
+const cors = require("cors"); 
 const uuid= require('uuid/v1');
 
 // My Routes
-const authRoutes = require("./routes/auth");
-const userRoutes = require("./routes/user");
+const authRoutes = require("./routes/auth"); 
+const userRoutes = require("./routes/user"); 
 
-// Db connection
+// Db connection 
 mongoose
   .connect(process.env.DATABASE, { 
     useNewUrlParser: true,
