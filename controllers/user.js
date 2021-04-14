@@ -1,5 +1,5 @@
 const User = require("../models/user");
-const Order = require("../models/Order")
+const Order = require("../models/Order");
 
 exports.getUserById = (req, res, next, id) => {
   User.findById(id).exec((err, user) => {
@@ -10,7 +10,7 @@ exports.getUserById = (req, res, next, id) => {
     }
     req.profile = user;
     next();
-  }); 
+  });
 };
 
 exports.getUser = (req, res) => {
@@ -41,13 +41,45 @@ exports.updateUser = (req, res) => {
 exports.userPurchaseList = (req, res) => {
   Order.find({ user: req.profile._id })
     .populate("user", "_id name")
-    .exec(
-      (err, order) => {
-        if(err){
+    .exec((err, order) => {
+      if (err) {
         res.status(400).json({
           error: "NO order in the account",
         });
       }
-      return res.json(Order)
-      });
+      return res.json(Order);
+    });
+};
+
+exports.pushOrderInPurchaseList = (req, res, next) => {
+  let purchases = [];
+  req.body.order.products.forEach((product) => {
+    purchases.push({
+      _id: product._id,
+      name: product.name,
+      description: product.description,
+      category: product.category,
+      quantity: product.quantity,
+      amount: req.body.order.amount,
+      transaction_id: req.body.order.transaction_id,
+    });
+  });
+
+  User.findOneAndUpdate(
+    {_id: req.profile._id},
+    
+  {$push:{purchases:purchases}}
+  ,
+  {new:true},
+  (err,purchase)=>{
+    if(err){
+      return res.status(400).json({
+        error:"unable to save purchase list"
+      })
+    }
+    next();
+  }
+
+    
+    );
 };
