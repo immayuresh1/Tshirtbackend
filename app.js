@@ -8,7 +8,7 @@ const cors = require("cors");
 const uuid= require('uuid/v1');
 
 // My Routes
-const authRoutes = require("./routes/auth"); 
+const authRoutes = require("./routes/auth");  
 const userRoutes = require("./routes/user"); 
 
 // Db connection 
