@@ -6,4 +6,7 @@ const {isSignedIn,isAdmin,isAuthenticated} = require("../controllers/auth")
 const {getUserById} = require("../controllers/user")
 
 
+router.param("userId",getUserById)
+router.param("categoryId",getCategoryById)
+
 module.exports = router
