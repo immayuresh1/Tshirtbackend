@@ -10,7 +10,7 @@ const uuid= require('uuid/v1');
 // My Routes
 const authRoutes = require("./routes/auth");  
 const userRoutes = require("./routes/user"); 
-
+const cateRoutes = require("./routes/category")
 // Db connection 
 mongoose
   .connect(process.env.DATABASE, { 
@@ -30,6 +30,7 @@ app.use(cors());
 // My routes
 app.use("/api", authRoutes);
 app.use("/api", userRoutes); 
+app.use("/api", cateRoutes); 
 
 
 // port

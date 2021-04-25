@@ -4,20 +4,21 @@ const router = express.Router();
 const {
   getCategoryById,
   createCategory,
+  getCategory,
   getAllCategory,
-  removeCategory,
-  getCategory,updateCategory,
+  updateCategory,
+  removeCategory
 } = require("../controllers/category");
 const { isSignedIn, isAdmin, isAuthenticated } = require("../controllers/auth");
 const { getUserById } = require("../controllers/user");
 
-// params
+//params
 router.param("userId", getUserById);
 router.param("categoryId", getCategoryById);
 
-// actual route starts here
+//actual routers goes here
 
-// create routes
+//create
 router.post(
   "/category/create/:userId",
   isSignedIn,
@@ -26,20 +27,20 @@ router.post(
   createCategory
 );
 
-// read routes
+//read
 router.get("/category/:categoryId", getCategory);
 router.get("/categories", getAllCategory);
 
-// update route
+//update
 router.put(
-    "/category/:categoryId/:userId",
-    isSignedIn,
-    isAuthenticated,
-    isAdmin,
-    updateCategory
-  );
+  "/category/:categoryId/:userId",
+  isSignedIn,
+  isAuthenticated,
+  isAdmin,
+  updateCategory
+);
 
-// delete route
+//delete
 
 router.delete(
   "/category/:categoryId/:userId",
@@ -48,10 +49,5 @@ router.delete(
   isAdmin,
   removeCategory
 );
-
-
-
-
-
 
 module.exports = router;
